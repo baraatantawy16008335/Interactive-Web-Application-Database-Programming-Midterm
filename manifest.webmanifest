@@ -1,0 +1,13 @@
+{
+  "name": "Database Programming",
+  "short_name": "DB Prog",
+  "description": "Interactive study companion: lectures, labs, simulators, quizzes and flashcards.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0e1014",
+  "theme_color": "#0e1014",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

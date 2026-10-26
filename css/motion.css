@@ -1,0 +1,184 @@
+/* ================================================================
+   Motion layer. Every effect tells the student something: where they
+   are (nav, page transitions), what changed (charts, answers), what to
+   read next (scroll reveals). All of it collapses under reduced motion.
+   ================================================================ */
+
+/* Sliding nav indicator */
+#nav { position: relative; }
+.nav-indicator { position: absolute; left: 0; right: 0; top: 0; height: 36px; border-radius: 8px; background: var(--accent-soft); z-index: 0; pointer-events: none;
+  transition: transform .55s var(--spring), height .4s var(--ease), opacity .3s; }
+.nav-indicator::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: var(--accent-viz); }
+#nav.has-ind .nav-link[aria-current="page"] { background: transparent; }
+.nav-link { position: relative; z-index: 1; }
+.nav-link .nav-num, .nav-link i { transition: transform .35s var(--spring), color .2s; }
+.nav-link:hover .nav-num, .nav-link:hover i { transform: translateX(2px); color: var(--ink); }
+
+/* Topbar gains depth once content scrolls beneath it */
+.topbar { transition: box-shadow .35s, border-color .35s, background .35s; }
+.topbar.scrolled { box-shadow: 0 10px 30px -18px rgb(10 12 16 / .35); }
+
+/* Scroll reveals */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease), transform .8s var(--ease); transition-delay: calc(var(--d, 0) * 70ms); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal:not(.in) .meter > span { transform: scaleX(0) !important; }
+.reveal.in .meter > span { transition-delay: calc(var(--d, 0) * 70ms + .25s); }
+
+/* Charts draw themselves the first time they appear */
+.bench.intro .viz:not(.dbv) rect:not(.hit) { transform-box: fill-box; transform-origin: 50% 100%; animation: barRise .8s var(--ease) both; animation-delay: calc(var(--k, 0) * 25ms + .1s); }
+.bench.intro .viz:not(.dbv) circle { transform-box: fill-box; transform-origin: center; animation: dotPop .6s var(--spring) both; animation-delay: calc(var(--k, 0) * 12ms + .15s); }
+.bench.intro .viz:not(.dbv) polyline, .bench.intro .viz:not(.dbv) path { animation: viewIn .8s var(--ease) both .15s; }
+@keyframes barRise { from { transform: scaleY(0); opacity: 0; } to { transform: scaleY(1); opacity: 1; } }
+@keyframes dotPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.bench { transition: box-shadow .4s, border-color .4s; }
+.bench:hover { border-color: var(--line-strong); }
+.bench-head i { transition: transform .5s var(--spring); }
+.bench:hover .bench-head i { transform: rotate(-12deg) scale(1.12); }
+
+/* Buttons and controls */
+.btn { transition: background .2s, border-color .2s, transform .3s var(--spring), box-shadow .3s; }
+.btn.primary { box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 6px 16px -8px color-mix(in srgb, var(--accent) 70%, transparent); }
+.btn.primary:hover { transform: translateY(-1px); box-shadow: 0 1px 0 rgb(255 255 255 / .18) inset, 0 10px 22px -8px color-mix(in srgb, var(--accent) 80%, transparent); }
+.btn:active, .btn.primary:active { transform: translateY(1px) scale(.98); transition-duration: .08s; }
+.btn .ph-arrow-right, .btn .ph-play { transition: transform .35s var(--spring); }
+.btn:hover .ph-arrow-right { transform: translateX(3px); }
+.btn:hover .ph-play { transform: scale(1.15); }
+.chip { transition: background .25s var(--ease), color .25s, border-color .25s, transform .3s var(--spring); }
+button.chip:active { transform: scale(.95); }
+.chip[aria-pressed="true"] { animation: chipOn .35s var(--spring); }
+@keyframes chipOn { 50% { transform: scale(1.06); } }
+.seg button { transition: background .25s var(--ease), color .2s, box-shadow .25s, transform .3s var(--spring); }
+.seg button:active { transform: scale(.96); }
+.icon-btn i { transition: transform .45s var(--spring); }
+.icon-btn:hover i { transform: rotate(-12deg); }
+#themeBtn:hover i { transform: rotate(40deg) scale(1.08); }
+
+/* Module cards: a soft spotlight follows the pointer */
+.mcard { overflow: hidden; isolation: isolate; }
+.mcard::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .35s;
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--accent-viz) 13%, transparent), transparent 65%); }
+.mcard:hover::before { opacity: 1; }
+.mcard .top i { transition: transform .5s var(--spring), color .3s; }
+.mcard:hover .top i { transform: translateY(-2px) rotate(-8deg); color: var(--accent); }
+.pager a strong { transition: color .2s; }
+.pager a:hover strong { color: var(--accent); }
+
+/* Course map */
+.course-map .map-node { animation: nodeIn .7s var(--spring) both; animation-delay: calc(.2s + var(--n, 0) * 55ms); transform-box: fill-box; transform-origin: center; }
+@keyframes nodeIn { from { opacity: 0; transform: translateY(10px) scale(.92); } }
+
+/* Quiz feedback */
+.q-opt.correct { animation: pop .5s var(--spring); }
+.q-opt.incorrect { animation: shake .45s var(--ease); }
+.q-opt .letter { transition: background .3s, color .3s, transform .35s var(--spring); }
+.q-opt:hover:not([disabled]) .letter { transform: scale(1.1); }
+@keyframes pop { 40% { transform: scale(1.025); } }
+@keyframes shake { 20% { transform: translateX(-6px); } 40% { transform: translateX(5px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+.quiz-top .meter > span { transition: transform .6s var(--spring); }
+.result-big { animation: resultIn .9s var(--spring) both; }
+@keyframes resultIn { from { opacity: 0; transform: translateY(14px) scale(.9); } }
+
+/* Read toggle */
+.read-btn[aria-pressed="true"] i { animation: tick .5s var(--spring); }
+@keyframes tick { 0% { transform: scale(.4) rotate(-30deg); } 100% { transform: none; } }
+.toc a i { transition: color .3s, transform .4s var(--spring); }
+
+/* Flashcards */
+.fc { transition: transform .75s cubic-bezier(.3, 1.3, .4, 1); }
+@media (hover: hover) { .fc:hover:not(.flipped) { transform: rotateY(-4deg) rotateX(2deg); } }
+
+/* Toast and dialog */
+.toast { transition: opacity .3s, transform .5s var(--spring); }
+.search-dialog[open] { animation: dialogIn .4s var(--spring); }
+@keyframes dialogIn { from { opacity: 0; transform: translateY(-10px) scale(.97); } }
+.sr { transition: background .15s, transform .25s var(--spring); }
+.sr.active { transform: translateX(3px); }
+
+/* Mobile drawer */
+.scrim { display: block !important; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+.scrim.on { opacity: 1; pointer-events: auto; }
+@keyframes drawerItem { from { opacity: 0; transform: translateX(-14px); } }
+@media (max-width: 900px) {
+  .sidebar { transition: transform .5s var(--ease); }
+  .sidebar.open .brand, .sidebar.open .nav-label, .sidebar.open .nav-link, .sidebar.open .side-progress { animation: drawerItem .5s var(--ease) both; animation-delay: calc(.08s + var(--s, 0) * 22ms); }
+  .topbar.scrolled { box-shadow: 0 8px 20px -14px rgb(10 12 16 / .4); }
+}
+@media (hover: none) {
+  .mcard:hover { transform: none; }
+  .mcard:active { transform: scale(.985); transition-duration: .1s; }
+  .q-opt:active:not([disabled]) { transform: scale(.985); }
+}
+
+/* Page and theme transitions (View Transitions API; other browsers keep the CSS fallback) */
+@supports (view-transition-name: none) {
+  .sidebar { view-transition-name: sidebar; }
+  .topbar { view-transition-name: topbar; }
+  ::view-transition-group(sidebar), ::view-transition-group(topbar),
+  ::view-transition-new(sidebar), ::view-transition-new(topbar) { animation: none; }
+  ::view-transition-old(sidebar), ::view-transition-old(topbar) { display: none; }
+  ::view-transition-old(root) { animation: none; }
+  ::view-transition-new(root) { animation: pageIn .5s var(--ease) both; }
+  html[data-vt="theme"] .sidebar, html[data-vt="theme"] .topbar { view-transition-name: none; }
+  html[data-vt="theme"]::view-transition-new(root) { animation: none; }
+}
+@keyframes pageIn { from { opacity: 0; transform: translateY(12px); } }
+
+/* ================================================================
+   Performance
+   ================================================================ */
+
+/* Simulators mount just before they scroll into view; until then they hold their space
+   with a skeleton so nothing below them jumps. */
+.bench[data-widget]:not([data-mounted]) { min-height: 360px; position: relative; overflow: hidden; background: var(--surface); }
+.bench[data-widget]:not([data-mounted])::after {
+  content: ""; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ink) 4%, transparent), transparent);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer { to { transform: translateX(100%); } }
+
+/* Looping decoration stops when it is not on screen. */
+.offscreen, .offscreen * { animation-play-state: paused !important; }
+
+/* Phones: blur behind moving content is the most expensive paint on mobile GPUs.
+   Swap it for near-opaque surfaces that look the same at a glance. */
+@media (max-width: 900px), (hover: none) {
+  .topbar { -webkit-backdrop-filter: none; backdrop-filter: none; background: color-mix(in srgb, var(--bg) 96%, transparent); }
+  .qs-start { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--surface); }
+  .scrim { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .search-dialog::backdrop { backdrop-filter: none; }
+  .sidebar { will-change: transform; }
+  .mcard::before { display: none; }
+}
+
+/* Readable charts on phones: wide charts keep a minimum width and swipe sideways.
+   Edge shadows (background-attachment: local vs scroll) show when there is more to see. */
+.viz-scroll { max-width: 100%; }
+@media (max-width: 700px) {
+  .viz-scroll {
+    overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; margin: 0 -4px; padding: 0 4px;
+    background:
+      linear-gradient(to right, var(--surface) 40%, transparent) left / 28px 100% no-repeat local,
+      linear-gradient(to left, var(--surface) 40%, transparent) right / 28px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, rgb(10 12 16 / .16), transparent) left / 12px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, rgb(10 12 16 / .16), transparent) right / 12px 100% no-repeat scroll;
+  }
+  .viz-scroll::-webkit-scrollbar { display: none; }
+  .viz-scroll > .viz { min-width: var(--minw, 0); }
+  .viz text { font-size: 12px; }
+  .viz-scroll .viz text { font-size: 12.5px; }
+  /* the redesigned dashboard stacks its tiles instead of squeezing them */
+  .dash-grid { grid-template-columns: minmax(0, 1fr) !important; }
+  .dash-tile svg { max-width: 100%; height: auto; }
+  .empty div { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bench[data-widget]:not([data-mounted])::after { animation: none; }
+  .reveal { opacity: 1; transform: none; }
+  .reveal:not(.in) .meter > span { transform: none !important; }
+  .brand-mark::after { display: none; }
+}
+@media print {
+  .reveal { opacity: 1 !important; transform: none !important; }
+}

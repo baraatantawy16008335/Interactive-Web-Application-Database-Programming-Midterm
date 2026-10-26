@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Database Programming</title>
+  <meta name="description" content="An interactive study companion for Database Programming (ICS502): lectures 1-5 and practice assignments 1-5, with index simulators, exam practice, a problem lab and flashcards.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%2316181d'/%3E%3Cg fill='%237a828f'%3E%3Crect x='7' y='22' width='5' height='11' rx='1.5'/%3E%3Crect x='15' y='16' width='5' height='17' rx='1.5'/%3E%3Crect x='23' y='19' width='5' height='14' rx='1.5'/%3E%3C/g%3E%3Crect x='31' y='11' width='5' height='22' rx='1.5' fill='%23ff8a3d'/%3E%3Cpolyline points='9.5,17 17.5,11 25.5,14 33.5,6' fill='none' stroke='%23eceef2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#f4f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1014" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <!-- App styles block first paint; fonts and icons load in parallel without blocking it -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/quiz.css">
+  <link rel="stylesheet" href="css/motion.css">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  </noscript>
+  <!-- Fetch every module at once instead of discovering them import by import -->
+  <link rel="modulepreload" href="js/app.js">
+  <link rel="modulepreload" href="js/modules.js">
+  <link rel="modulepreload" href="js/bank.js">
+  <link rel="modulepreload" href="js/store.js">
+  <link rel="modulepreload" href="js/viz.js">
+  <link rel="modulepreload" href="js/motion.js">
+  <link rel="modulepreload" href="js/quiz-setup.js">
+  <link rel="modulepreload" href="js/widgets/index.js">
+  <link rel="modulepreload" href="js/problemlab-view.js">
+  <link rel="modulepreload" href="js/formula-view.js">
+  <link rel="modulepreload" href="js/engine/bptree.js">
+  <link rel="modulepreload" href="js/engine/hash.js">
+  <link rel="modulepreload" href="js/engine/multidim.js">
+  <link rel="modulepreload" href="js/engine/cost.js">
+  <link rel="modulepreload" href="js/engine/draw.js">
+  <link rel="modulepreload" href="js/content/helpers.js">
+  <link rel="modulepreload" href="js/content/problems.js">
+  <link rel="modulepreload" href="js/content/u1.js">
+  <link rel="modulepreload" href="js/content/u2.js">
+  <link rel="modulepreload" href="js/content/u3.js">
+  <link rel="modulepreload" href="js/content/u4.js">
+  <link rel="modulepreload" href="js/content/u5.js">
+  <link rel="modulepreload" href="js/widgets/sorter.js">
+  <link rel="modulepreload" href="js/widgets/opsbench.js">
+  <link rel="modulepreload" href="js/widgets/w-u1.js">
+  <link rel="modulepreload" href="js/widgets/w-u2.js">
+  <link rel="modulepreload" href="js/widgets/w-u3.js">
+  <link rel="modulepreload" href="js/widgets/w-u4.js">
+  <link rel="modulepreload" href="js/widgets/w-u5.js">
+  <script>
+    try { const t = localStorage.getItem('dbp-theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#view">Skip to content</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Course navigation">
+      <a class="brand" href="#/" aria-label="Database Programming: overview">
+        <span class="brand-mark" id="brandMark" aria-hidden="true">
+          <svg viewBox="0 0 40 40">
+            <g class="bm-grid"><line x1="5" x2="37" y1="14" y2="14"/><line x1="5" x2="37" y1="24" y2="24"/></g>
+            <rect class="bm-bar" style="--i:0" x="7" y="22" width="5" height="11" rx="1.5"/>
+            <rect class="bm-bar" style="--i:1" x="15" y="16" width="5" height="17" rx="1.5"/>
+            <rect class="bm-bar" style="--i:2" x="23" y="19" width="5" height="14" rx="1.5"/>
+            <rect class="bm-bar bm-hi" style="--i:3" x="31" y="11" width="5" height="22" rx="1.5"/>
+            <line class="bm-axis" x1="5" x2="37" y1="34" y2="34"/>
+            <polyline class="bm-trend" pathLength="100" points="9.5,17 17.5,11 25.5,14 33.5,6"/>
+            <circle class="bm-ring" cx="33.5" cy="6" r="2.6"/>
+            <circle class="bm-dot" cx="33.5" cy="6" r="2.6"/>
+          </svg>
+        </span>
+        <span class="brand-text"><strong>Database</strong><strong>Programming</strong></span>
+      </a>
+      <nav id="nav"></nav>
+      <div class="side-progress" id="sideProgress"></div>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false"><i class="ph ph-list"></i></button>
+        <div class="crumbs" id="crumbs"></div>
+        <div class="top-actions">
+          <button class="search-trigger" id="searchBtn" aria-label="Search terms">
+            <i class="ph ph-magnifying-glass"></i><span>Search terms</span><kbd>/</kbd>
+          </button>
+          <button class="icon-btn" id="themeBtn" aria-label="Toggle color theme"><i class="ph ph-moon"></i></button>
+        </div>
+      </header>
+      <main id="view" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <dialog class="search-dialog" id="searchDialog" aria-label="Search glossary">
+    <div class="search-box">
+      <i class="ph ph-magnifying-glass"></i>
+      <input id="searchInput" type="search" placeholder="Search a term, e.g. sparse index, extensible hashing, KD-tree" autocomplete="off" aria-label="Search">
+      <kbd>Esc</kbd>
+    </div>
+    <div class="search-results" id="searchResults"></div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
